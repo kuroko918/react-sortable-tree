@@ -5,7 +5,7 @@ import withScrolling, {
 } from 'frontend-collective-react-dnd-scrollzone';
 import isEqual from 'lodash.isequal';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component, forwardRef } from 'react';
 import { DndContext, DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { polyfill } from 'react-lifecycles-compat';
@@ -195,7 +195,7 @@ class ReactSortableTree extends Component {
     instanceProps.searchQuery = nextProps.searchQuery;
     instanceProps.searchFocusOffset = nextProps.searchFocusOffset;
     newState.instanceProps = {...instanceProps, ...newState.instanceProps };
- 
+
     return newState;
   }
 
@@ -763,6 +763,7 @@ class ReactSortableTree extends Component {
       <div
         className={classnames('rst__tree', className, rowDirectionClass)}
         style={containerStyle}
+        ref={this.props.ref}
       >
         {list}
       </div>
@@ -948,11 +949,11 @@ const SortableTreeWithoutDndContext = props => (
   </DndContext.Consumer>
 );
 
-const SortableTree = props => (
+const SortableTree = forwardRef((props, ref) => (
   <DndProvider backend={HTML5Backend}>
-    <SortableTreeWithoutDndContext {...props} />
+    <SortableTreeWithoutDndContext ref={ref} {...props} />
   </DndProvider>
-);
+));
 
 // Export the tree component without the react-dnd DragDropContext,
 // for when component is used with other components using react-dnd.
